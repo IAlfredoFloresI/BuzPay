@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f4f4f9;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: #FFC107; /* Color amarillo */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    width: 20px; /* Ajusta el tamaño del logo */
+    height: auto;
+    margin-right: 10px; /* Añade un margen derecho */
+}
+
+.back-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #FFC107; /* Color amarillo */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #e0a800; /* Color amarillo oscuro */
+}
+
+.container {
+    background-color: white; /* Fondo blanco */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Añadir sombra para un aspecto más profesional */
+}
+
+.field {
+    margin: 20px 0;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    font-size: 20px; /* Ajustar el tamaño de fuente */
+    color: black;
+    margin-bottom: 10px;
+}
+
+input {
+    padding: 10px; /* Ajustar el padding */
+    width: 80%;
+    max-width: 300px;
+    font-size: 16px;
+    border: 1px solid #ccc; /* Cambiar el borde */
+    border-radius: 5px;
+    box-shadow: none; /* Quitar sombra */
+    transition: all 0.3s ease;
+    background-color: #f8f9fa; /* Fondo gris claro para campos readonly */
+}
+
+input:focus {
+    box-shadow: none; /* Quitar sombra */
+    outline: none;
+}
+
+input[readonly] {
+    background-color: #f8f9fa; /* Fondo gris claro */
+    color: #6c757d; /* Color de texto gris */
+}

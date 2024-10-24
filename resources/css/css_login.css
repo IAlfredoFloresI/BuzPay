@@ -1,0 +1,101 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #5e5ee6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;  /* Aumenta el ancho del contenedor */
+    max-width: 1200px; /* Establece un ancho máximo para pantallas grandes */
+}
+
+.container .logo {
+    background-color: #e5b73b;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    width: 50%;
+}
+
+.container .logo img {
+    width: 300px; 
+    height: 250px; 
+    margin-bottom: 20px;
+}
+
+.container .logo h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: normal;
+}
+
+.container .login-form {
+    padding: 40px;
+    width: 50%;
+}
+
+.login-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-form .form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.login-form .form-check input {
+    margin-right: 10px;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #5e5ee6;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-form .register-btn {
+    margin-top: 20px;
+    background-color: #5e5ee6;
+}
+
+.text-white {
+    --bs-text-opacity: 1;
+    color: #ffffff;
+}
