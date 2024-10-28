@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+
+Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
 
 Route::get('/', function () {
     return view('welcome');
