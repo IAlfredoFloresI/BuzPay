@@ -5,10 +5,13 @@ let elementoDeTypewriter = new Typewriter(elementoHTMLTPAYBUS, {
 });
 
 elementoDeTypewriter.typeString('Bienvenido a PAYBUS')
-    .pauseFor(2500)
+    .pauseFor(3500)
     .deleteAll()
-    .typeString('Recarga fácil, viaja sin complicaciones.')
-    .pauseFor(2500)
+    .typeString('Recarga fácil,')
+    .pauseFor(1500)
+    .deleteAll()
+    .typeString('Viaja sin complicaciones.')
+    .pauseFor(1500)
     .deleteAll()
     .typeString('¡Tu movilidad en tus manos!')
     .pauseFor(2500)

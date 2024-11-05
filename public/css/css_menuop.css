@@ -1,0 +1,33 @@
+.menu{
+    list-style: none;
+}
+
+.MenuOp{
+    display: flex;
+    justify-content: center;
+    padding: 0 0 0 1px;
+}
+
+.MenuOp li{
+    float: left;
+    height: 200px;
+    border-top: 3px solid #ffffff;
+}
+
+.N{
+    padding-top: 35px;
+    padding-right: 120px;
+    padding-left: 170px;
+}
+
+.CS{
+    padding-top: 35px;
+    padding-left: 120px;
+    padding-right: 170px;
+}
+
+.MenuOp li div{
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 20px;
+}

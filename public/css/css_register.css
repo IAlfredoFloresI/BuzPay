@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #e6b800;
+    background-color: #ffffff; /* Cambiado a blanco */
     margin: 0;
     padding: 0;
     display: flex;
@@ -79,13 +79,13 @@ body {
     text-align: center;
 }
 
-.button-group .btn-warning {
-    background-color: #FFD700;
+.button-group{
+    background-color: #FFD14B;
     color: #000;
 }
 
 .button-group .btn-warning:hover {
-    background-color: #d4af37;
+    background-color: #FFD14B;
 }
 
 .button-group .btn-secondary {
