@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Auth;
 
 
+use App\Http\Controllers\CardController;
 
 Route::get('/', function () {
     return view('index');
@@ -52,3 +53,7 @@ Route::get('/register', [RegisteredUserController::class, 'create'])->name('regi
 
 
 require __DIR__.'/auth.php';
+
+Route::get('/admin/card', [CardController::class, 'index'])->name('admin.card');
+Route::post('/admin/get-card-details', [CardController::class, 'getCardDetails']);
+Route::get('/admin/consultar-saldo', [CardController::class, 'show'])->name('card.consultar');
