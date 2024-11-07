@@ -4,6 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\GoogleController;
+use Illuminate\Support\Facades\Auth;
+
+
 
 Route::get('/', function () {
     return view('index');
@@ -12,7 +16,19 @@ Route::get('/', function () {
 
 Route::get('/admin', function () {
     return view('admin.index');
-})->middleware('auth');
+})->name('admin.index')->middleware(['auth', 'verified']);
+
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+Route::get('/email/verify/success', function () {
+    return view('auth.verify-email-success');
+})->name('verification.success');
+
+Route::get('/user/verification-status', function () {
+    return response()->json(['verified' => Auth::check() && Auth::user()->hasVerifiedEmail()]);
+})->name('user.verification.status');
+
 
 
 Route::get('/dashboard', function () {

@@ -15,7 +15,7 @@ class UpdateTeamName implements UpdatesTeamNames
      *
      * @param  array<string, string>  $input
      */
-    public function update(User $user, Team $team, array $input): void
+    public function update(\Illuminate\Foundation\Auth\User $user, \Illuminate\Database\Eloquent\Model $team, array $input): void
     {
         Gate::forUser($user)->authorize('update', $team);
 
