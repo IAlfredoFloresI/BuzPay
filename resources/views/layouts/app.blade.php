@@ -25,7 +25,6 @@
 
 <body class="sb-nav-fixed font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
 
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
