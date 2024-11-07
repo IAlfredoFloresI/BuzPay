@@ -18,7 +18,7 @@
         <div class="row mb-4">
             @foreach ([
                 ['title' => 'Recargar Tarjeta', 'bg' => 'bg-primary', 'icon' => 'bi-cash-coin', 'link' => 'recargartarjeta.php'],
-                ['title' => 'Consultar Saldo', 'bg' => 'bg-warning', 'icon' => 'bi-card-checklist', 'link' => 'consultar_tarjeta.php'],
+                ['title' => 'Consultar Saldo', 'bg' => 'bg-warning', 'icon' => 'bi-card-checklist', 'link' => route('card.consultar')], // Cambia esta línea
                 ['title' => 'Cierre de Caja', 'bg' => 'bg-primary', 'icon' => 'bi-inboxes-fill', 'link' => 'cierre_caja.php'],
             ] as $option)
             <div class="col-xl-4 col-md-6">
