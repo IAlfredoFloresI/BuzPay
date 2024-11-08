@@ -59,7 +59,7 @@
                         </nav>
                     </div>
                     <div class="sb-sidenav-menu-heading text-white">Observaciones</div>
-                    <a class="nav-link text-white stretched-link" href="<?//php echo $clasificacionUsuario == 2 ? 'estadisticas.php' : '#'; ?>" <?//php echo $clasificacionUsuario == 1 ? 'data-bs-toggle="modal" data-bs-target="#contactAdminModal"' : ''; ?>>
+                    <a class="nav-link text-white stretched-link" href="<?//php echo $clasificacionUsuario == 2 ? 'estadisticas.php' : '#'; ?>?//php echo $clasificacionUsuario == 1 ? 'data-bs-toggle="modal" data-bs-target="#contactAdminModal"' : ''; ?>
                         <div class="sb-nav-link-icon text-white">
                             <!-- Icono de estadísticas -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up text-white" viewBox="0 0 16 16">

@@ -39,7 +39,7 @@
                             <div class="row">
                                 <div class="col-md-6 centered-content">
                                     <br><br><br>
-                                    <img src="assets/img/vayven.jpg" alt="tarjetas" width="400" height="250">
+                                    <img src="{{ asset('assets/img/vayven.jpg') }}" alt="Tarjetas" width="400" height="250">
                                 </div>
                                 <div class="col-md-6">
                                     <!-- Sección del lector de QR -->
@@ -119,7 +119,7 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts_admin.js"></script>
-        <script>
+       <-- <script>
             // Función para consultar el folio de la tarjeta
             function consultarFolio() {
                 var id = document.getElementById('folio').value;

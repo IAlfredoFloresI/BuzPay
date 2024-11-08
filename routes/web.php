@@ -6,13 +6,17 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\CardController;
 
 Route::get('/', function () {
     return view('index');
 });
+
+
+
+Route::resource('users', UserController::class);
 
 
 Route::get('/admin', function () {
