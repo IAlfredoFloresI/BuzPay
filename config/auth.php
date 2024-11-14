@@ -39,7 +39,6 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
-            'redirect_to' => '/',
         ],
     ],
 
@@ -66,11 +65,7 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        App\Providers\EventServiceProvider::class,
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+
     ],
 
     /*

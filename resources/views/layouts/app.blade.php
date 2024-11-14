@@ -12,9 +12,12 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/Camión_Icono.png') }}" />
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="{{ asset('css/styles_admin.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/Consultar_Saldo.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/css_cierrecaja.css') }}" rel="stylesheet" />
+
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     @stack('styles')
-
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -22,10 +25,13 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body class="sb-nav-fixed font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
+        @include('layouts.navigation')
 
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
@@ -47,9 +53,10 @@
         </div>
         
         @include('layouts.footer') <!-- Asegúrate de que este archivo exista -->
-        @include('layouts.navbar') <!-- Asegúrate de que este archivo exista -->
-
     </div>
+
+
 </body>
+
 
 </html>
