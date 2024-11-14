@@ -9,6 +9,7 @@ use App\Http\Controllers\RecargaController;
 use App\Http\Controllers\EstadisticaController;
 use App\Http\Controllers\CierreCajaController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Auth\GoogleController;
 
 
 
@@ -18,7 +19,7 @@ Route::get('/', function () {
 
 
 
-Route::resource('users', UserController::class);
+
 
 
 Route::get('/admin', function () {
@@ -46,7 +47,14 @@ Route::middleware('guest')->group(function () {
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 
 
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+
 require __DIR__.'/auth.php';
+
+
 
 //Consultar tarjeta
 // routes/api.php
