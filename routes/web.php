@@ -17,6 +17,10 @@ Route::get('/', function () {
 });
 
 
+
+Route::resource('users', UserController::class);
+
+
 Route::get('/admin', function () {
     return view('admin.index');
 })->name('admin.index');;

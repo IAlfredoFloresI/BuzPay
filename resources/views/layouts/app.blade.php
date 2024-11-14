@@ -25,19 +25,34 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body class="sb-nav-fixed font-sans antialiased">
-    <div id="wrapper">
-        @include('layouts.sidebar') <!-- Sidebar a la izquierda con ancho fijo -->
+    <div class="min-h-screen bg-gray-100">
+        @include('layouts.navigation')
 
-        <div id="page-content-wrapper">
-            @include('layouts.navbar') <!-- Navbar en la parte superior -->
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                @include('layouts.sidebar') <!-- Asegúrate de que este archivo exista -->
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    @isset($header)
+                    <header class="bg-white shadow">
+                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                            {{ $header }}
+                        </div>
+                    </header>
+                    @endisset
 
-            <div class="container-fluid mt-4">
-                @yield('content') <!-- Contenido principal de cada vista -->
+                    @yield('content')
+                </main>
             </div>
         </div>
+        
+        @include('layouts.footer') <!-- Asegúrate de que este archivo exista -->
     </div>
 
 

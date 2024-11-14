@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
 
 class RegisteredUserController extends Controller
 {
@@ -33,7 +35,7 @@ class RegisteredUserController extends Controller
         }
 
         // Creación del nuevo usuario
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'curp' => $request->curp,
             'nacimiento' => $request->nacimiento,
@@ -41,6 +43,9 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             // Agrega otros campos si es necesario
         ]);
+
+        event(new Registered($user));
+        Auth::login($user); 
 
         // Redirigir o devolver respuesta después del registro exitoso
         return redirect()->route('login')->with('success', 'Registro exitoso. Puedes iniciar sesión.');
