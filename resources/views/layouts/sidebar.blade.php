@@ -1,3 +1,23 @@
+<style>
+    #wrapper {
+    display: flex;
+}
+
+#sidebar {
+    width: 250px; /* Ancho fijo del sidebar */
+    position: fixed;
+    height: 100vh;
+    background-color: #343a40; /* Ajusta el color de fondo si es necesario */
+}
+
+#page-content-wrapper {
+    margin-left: 200px; /* Mismo ancho que el sidebar */
+    width: calc(100% - 250px);
+    padding: 20px;
+}
+
+
+</style>
 <div id="layoutSidenav">
     <div id="layoutSidenav_nav">
         <!-- Barra lateral de navegación -->
@@ -5,7 +25,7 @@
             <div class="sb-sidenav-menu" style="background-color: #343A40;">
                 <div class="nav">
                     <div class="sb-sidenav-menu-heading text-white">General</div>
-                    <a class="nav-link text-white" href="admin.php">
+                    <a class="nav-link text-white" href="{{ route('admin.index') }}">
                         <div class="sb-nav-link-icon text-white">
                             <!-- Icono de inicio -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
@@ -18,6 +38,7 @@
                         </div>
                         Inicio
                     </a>
+
                     <div class="sb-sidenav-menu-heading text-white">Operaciones</div>
                     <a class="nav-link collapsed text-white" href="#" data-bs-toggle="collapse"
                         data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
@@ -35,8 +56,8 @@
                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
                         data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link text-white" href="recargartarjeta.php">Recargar Tarjeta</a>
-                            <a class="nav-link text-white" href="consultar_tarjeta.php">Consultar Datos Tarjeta</a>
+                        <a class="nav-link text-white" href="{{ route('recarga.form') }}">Recargar Tarjeta</a>
+                            <a class="nav-link text-white" href="{{ route('card.consultar') }}">Consultar Datos Tarjeta</a>
                         </nav>
                     </div>
                     <a class="nav-link collapsed text-white" href="#" data-bs-toggle="collapse"
@@ -55,11 +76,11 @@
                         data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
                             <!--Corregir cuando pongas puestos-->
-                            <a class="nav-link text-white stretched-link" data-bs-toggle="modal" data-bs-target="#contactAdminModal">Administración de Usuarios</a>
+                            <a class="nav-link text-white" href="{{ route('employees.index') }}">Administración de usuarios</a>
                         </nav>
                     </div>
                     <div class="sb-sidenav-menu-heading text-white">Observaciones</div>
-                    <a class="nav-link text-white stretched-link" href="<?//php echo $clasificacionUsuario == 2 ? 'estadisticas.php' : '#'; ?>" <?//php echo $clasificacionUsuario == 1 ? 'data-bs-toggle="modal" data-bs-target="#contactAdminModal"' : ''; ?>>
+                    <a class="nav-link text-white" href="{{ route('estadisticas') }}">
                         <div class="sb-nav-link-icon text-white">
                             <!-- Icono de estadísticas -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up text-white" viewBox="0 0 16 16">
@@ -68,7 +89,7 @@
                             Estadísticas
                         </div>
                     </a>
-                    <a class="nav-link text-white" href="cierre_caja.php">
+                    <a class="nav-link text-white" href="{{ route('cierreCaja.index') }}">
                         <div class="sb-nav-link-icon text-white">
                             <!-- Icono de cierre de caja -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

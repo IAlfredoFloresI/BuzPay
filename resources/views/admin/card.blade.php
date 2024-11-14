@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <ol class="breadcrumb mb=4">
-                        <li class="breadcrumb-item"><a href="admin.php">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Inicio</a></li>
                         <li class="breadcrumb-item active">Consulta de Datos de Tarjeta</li>
                     </ol>
                     <div class="card mb-4" style="background-color: white">
@@ -39,7 +39,7 @@
                             <div class="row">
                                 <div class="col-md-6 centered-content">
                                     <br><br><br>
-                                    <img src="assets/img/vayven.jpg" alt="tarjetas" width="400" height="250">
+                                    <img src="{{ asset('assets/img/vayven.jpg') }}" alt="Tarjetas" width="400" height="250">
                                 </div>
                                 <div class="col-md-6">
                                     <!-- Sección del lector de QR -->
@@ -104,18 +104,6 @@
                 </div>
 
             </main>
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts_admin.js"></script>

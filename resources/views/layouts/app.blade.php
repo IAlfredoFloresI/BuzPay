@@ -12,9 +12,12 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/Camión_Icono.png') }}" />
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="{{ asset('css/styles_admin.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/Consultar_Saldo.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/css_cierrecaja.css') }}" rel="stylesheet" />
+
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     @stack('styles')
-
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -25,31 +28,20 @@
 </head>
 
 <body class="sb-nav-fixed font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+    <div id="wrapper">
+        @include('layouts.sidebar') <!-- Sidebar a la izquierda con ancho fijo -->
 
-        <div id="layoutSidenav">
-            <div id="layoutSidenav_nav">
-                @include('layouts.sidebar') <!-- Asegúrate de que este archivo exista -->
-            </div>
-            <div id="layoutSidenav_content">
-                <main>
-                    @isset($header)
-                    <header class="bg-white shadow">
-                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                            {{ $header }}
-                        </div>
-                    </header>
-                    @endisset
+        <div id="page-content-wrapper">
+            @include('layouts.navbar') <!-- Navbar en la parte superior -->
 
-                    @yield('content')
-                </main>
+            <div class="container-fluid mt-4">
+                @yield('content') <!-- Contenido principal de cada vista -->
             </div>
         </div>
-        
-        @include('layouts.footer') <!-- Asegúrate de que este archivo exista -->
-        @include('layouts.navbar') <!-- Asegúrate de que este archivo exista -->
-
     </div>
+
+
 </body>
+
 
 </html>

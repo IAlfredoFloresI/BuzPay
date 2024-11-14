@@ -1,3 +1,13 @@
+<style>
+    #page-content-wrapper {
+    margin-left: 220px; /* Mantén el margen izquierdo del sidebar */
+    width: calc(100% - 250px);
+    padding-top: 60px; /* Ajusta este valor si el navbar es más alto o más bajo */
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+</style>
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Marca de la barra de navegación -->
         <a class="navbar-brand ps-3" href="admin.php">PAYBUS</a>
