@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app1')
 
 @section('content')
 
@@ -24,8 +24,6 @@
     </style>
 
 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-<meta name="csrf-token" content="{{ csrf_token() }}">
-
 
 @push('styles')
     <link href="{{ asset('css/styles_admin.css') }}" rel="stylesheet" />
@@ -187,110 +185,59 @@
     <script src="{{ asset('js/html5-qrcode.min.js') }}"></script>
 
     <script>
-    let html5QrCode;
+      let html5QrCode;
 
-    // Inicialización del escáner QR cuando se presiona el botón
-    document.getElementById("start-qr-reader").addEventListener("click", function () {
-        // Inicia el lector QR
-        html5QrCode = new Html5Qrcode("reader");
+// Inicialización del escáner QR cuando se presiona el botón
+document.getElementById("start-qr-reader").addEventListener("click", function() {
+    // Inicia el lector QR
+    html5QrCode = new Html5Qrcode("reader");
 
-        // Empieza a leer el QR
-        html5QrCode.start(
-            { facingMode: "environment" }, // Utiliza la cámara trasera del dispositivo
-            {
-                fps: 10, // fotogramas por segundo
-                qrbox: 250, // tamaño del cuadro para el escaneo
-            },
-            function (decodedText, decodedResult) {
-                // Este código se ejecuta cuando se lee el QR
-                console.log(`QR decodificado: ${decodedText}`);
-                obtenerDatosDelCliente(decodedText);
-                html5QrCode.stop(); // Detén el escáner después de leer el código
-            },
-            function (errorMessage) {
-                // Este código se ejecuta cuando hay un error al leer el QR
-                console.log(`Error al leer QR: ${errorMessage}`);
-            }
-        ).catch((err) => {
-            console.log(`Error al iniciar el escáner: ${err}`);
-        });
+    // Empieza a leer el QR
+    html5QrCode.start(
+        { facingMode: "environment" }, // Utiliza la cámara trasera del dispositivo
+        {
+            fps: 10, // fotogramas por segundo
+            qrbox: 250, // tamaño del cuadro para el escaneo
+        },
+        function (decodedText, decodedResult) {
+            // Este código se ejecuta cuando se lee el QR
+            console.log(`QR decodificado: ${decodedText}`);
+            obtenerDatosDelCliente(decodedText);
+            html5QrCode.stop(); // Detén el escáner después de leer el código
+        },
+        function (errorMessage) {
+            // Este código se ejecuta cuando hay un error al leer el QR
+            console.log(`Error al leer QR: ${errorMessage}`);
+        }
+    ).catch((err) => {
+        console.log(`Error al iniciar el escáner: ${err}`);
     });
+});
 
-    // Función para obtener los datos del cliente basados en el ID del QR
-    function obtenerDatosDelCliente(id) {
-        // Realiza una solicitud AJAX para obtener los datos del cliente
-        fetch(`/Controllers/RecargaController${id}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta de la API');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Rellena los campos de la tarjeta con los datos obtenidos
-                    document.getElementById("tarjeta-input").value = data.idusuario;
-                } else {
-                    alert('Cliente no encontrado');
-                }
-            })
-            .catch(error => {
-                console.error('Error al obtener los datos:', error);
-            });
-    }
-
-    // Obtén el token CSRF desde Blade
-    const csrfToken = '{{ csrf_token() }}';
-
-    // Función para realizar la recarga
-    document.getElementById("recargar-button").addEventListener("click", function () {
-        const tarjeta = document.getElementById("tarjeta-input").value; // ID de tarjeta (rellenado por el lector QR)
-        const monto = document.getElementById("otro-dato-input").value; // Monto de recarga
-
-        // Validar que los campos no estén vacíos
-        if (!tarjeta || !monto) {
-            alert("Por favor, complete todos los campos antes de realizar la recarga.");
-            return;
-        }
-
-        // Enviar los datos de recarga al servidor
-        fetch('/admin/recarga', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Token CSRF para seguridad
-            },
-            body: JSON.stringify({
-                tarjeta: tarjeta,
-                monto: monto
-            })
+// Función para obtener los datos del cliente basados en el ID del QR
+function obtenerDatosDelCliente(idUsuario) {
+    // Realiza una solicitud AJAX para obtener los datos del cliente
+    fetch(`\Controllers\RecargaController.php${idUsuario}`) //No extrae
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API');
+            }
+            return response.json();
         })
-        .then(response => response.text())  // Cambiar a text() para ver la respuesta cruda
-.then(responseText => {
-    console.log('Respuesta del servidor:', responseText);
-    try {
-        const data = JSON.parse(responseText);  // Intentar parsear el texto a JSON
-        if (data.message) {
-            alert(data.message);
-            document.getElementById("tarjeta-input").value = "";
-            document.getElementById("otro-dato-input").value = "";
-        } else if (data.error) {
-            alert(`Error: ${data.error}`);
-        }
-    } catch (error) {
-        console.error('Error al parsear la respuesta JSON:', error);
-        alert('Hubo un error al procesar la respuesta del servidor.');
-    }
+        .then(data => {
+            if (data.success) {
+                // Rellena los campos de la tarjeta con los datos obtenidos
+                document.getElementById("tarjeta-input").value = data.usuario.idusuario;
+            } else {
+                alert('Cliente no encontrado');
+            }
         })
         .catch(error => {
-            console.error('Error en la solicitud de recarga:', error);
-            alert('Hubo un error al procesar la recarga.');
+            console.error('Error al obtener los datos:', error);
         });
-    });
-</script>
+}
 
-
-
+    </script>
     <!-- Cargar la librería de QR -->
     <script src="https://unpkg.com/html5-qrcode"></script>
 </main>

@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\DB;
 class RecargaModel extends Model
 {
     protected $table = 'recarga'; // Nombre de la tabla en la base de datos
+
+    protected $primaryKey = 'idrecarga';
+
     public $timestamps = false;
 
     protected $fillable = [
+        'idrecarga',
         'monto',
         'fecha',
         'tarjeta',
@@ -21,7 +25,7 @@ class RecargaModel extends Model
     public static function actualizarSaldoTarjeta($tarjetaId, $monto)
     {
         return DB::table('tarjeta')
-            ->where('ID', $tarjetaId)
-            ->increment('saldoTotal', $monto);
+            ->where('id', $tarjetaId)
+            ->increment('saldototal', $monto);
     }
 }

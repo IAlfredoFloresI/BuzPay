@@ -29,7 +29,7 @@
 
 <body class="sb-nav-fixed font-sans antialiased">
     <div class="d-flex" id="wrapper">
-        @include('layouts.sidebar') <!-- El sidebar se mostrará a la izquierda -->
+        @include('layouts.sidebar1') <!-- El sidebar se mostrará a la izquierda -->
 
         <div id="page-content-wrapper">
             @include('layouts.navbar') <!-- El navbar se mostrará en la parte superior -->

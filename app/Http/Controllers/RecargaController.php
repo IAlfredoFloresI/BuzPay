@@ -8,21 +8,28 @@ use Illuminate\Support\Facades\DB;
 
 class RecargaController extends Controller
 {
-    public function getClienteData($id)
+public function obtenerDatosDelCliente($id)
 {
-    $cliente = RecargaModel::find($id);
+    $cliente = DB::table('tarjeta')->where('id', $id)->first();
+
     if ($cliente) {
-        return response()->json(['success' => true, 'usuario' => $cliente]);
+        return response()->json([
+            'success' => true,
+            'idusuario' => $cliente->id, // Asegúrate de que 'idusuario' tiene el valor correcto
+            'nombre' => $cliente->nombre, // Agrega más campos si es necesario
+        ]);
     } else {
         return response()->json(['success' => false]);
     }
 }
-
     public function realizarRecarga(Request $request)
     {
+        return response()->json(['message' => 'Recarga realizada correctamente'], 200); //CHAFA
+
+        
         $request->validate([
             'fecha' => 'required|date',
-            'tarjeta' => 'required|exists:tarjeta,ID',
+            'tarjeta' => 'required|exists:tarjeta,id',
             'monto' => 'required|numeric|min:0',
             'usuario' => 'required|integer',
         ]);

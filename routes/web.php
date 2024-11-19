@@ -9,6 +9,7 @@ use App\Http\Controllers\RecargaController;
 use App\Http\Controllers\EstadisticaController;
 use App\Http\Controllers\CierreCajaController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Auth\GoogleController;
 
 
 
@@ -18,7 +19,7 @@ Route::get('/', function () {
 
 
 
-Route::resource('users', UserController::class);
+
 
 
 Route::get('/admin', function () {
@@ -46,16 +47,26 @@ Route::middleware('guest')->group(function () {
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 
 
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+
 require __DIR__.'/auth.php';
+
+
 
 //Consultar tarjeta
 // routes/api.php
 Route::get('/cliente/{id}', [RecargaController::class, 'getClienteData']);
+Route::post('/consultar-datos-tarjeta', [CardController::class, 'getCardDetails'])->name('card.getDetails'); // Ruta para consultar saldo y vencimiento
 
 
 Route::get('/admin/card', [CardController::class, 'index'])->name('admin.card');
 Route::post('/admin/get-card-details', [CardController::class, 'getCardDetails']);
 Route::get('/admin/consultar-saldo', [CardController::class, 'show'])->name('card.consultar');
+Route::get('/admin/card', [CardController::class, 'index']);
+Route::get('/consultar-tarjeta', [CardController::class, 'getCardDetails']);
 
 //Recargar tarjeta
 // Ruta para mostrar la vista de recarga
@@ -64,6 +75,8 @@ Route::get('/admin/recarga', function () {
 })->name('recarga.form');
 
 Route::post('/admin/recarga', [RecargaController::class, 'realizarRecarga'])->name('recarga.realizar');
+Route::get('/Controllers/RecargaController{id}', [RecargaController::class, 'obtenerDatosDelCliente']);
+
 
 //Estadistica
 Route::get('/estadisticas/recargas-por-mes', [EstadisticaController::class, 'getRecargasPorMes']);
@@ -83,10 +96,34 @@ Route::prefix('cierre-caja')->group(function () {
 
 //CRUD
 Route::prefix('employees')->group(function () {
-    Route::get('/list', [RegisterController::class, 'list_empleados']);
-    Route::get('/get/{id}', [RegisterController::class, 'get_employee']);
-    Route::post('/register', [RegisterController::class, 'register']);
-    Route::post('/update/{id}', [RegisterController::class, 'update']);
-    Route::post('/delete/{id}', [RegisterController::class, 'delete']);
+    Route::get('/list', [RegisterController::class, 'list_empleados'])->name('employees.list'); // Aquí agregué el nombre
+    Route::get('/get/{id}', [RegisterController::class, 'get_employee'])->name('employees.get'); // Opcional, agrega un nombre
+    Route::post('/register', [RegisterController::class, 'register'])->name('employees.register'); // Opcional, agrega un nombre
+    Route::post('/update/{id}', [RegisterController::class, 'update'])->name('employees.update'); // Opcional, agrega un nombre
+    Route::post('/delete/{id}', [RegisterController::class, 'delete'])->name('employees.delete'); // Opcional, agrega un nombre
     Route::get('/employees', [RegisterController::class, 'index'])->name('employees.index');
 });
+
+
+//AQUÍ COMINEZAN LAS PÁGINAS PARA EMPLEADOS
+
+
+//Página para los empleados
+Route::get('/empleados', function () {
+    return view('Empleados.index');
+})->name('Empleados.index');;
+
+// Ruta para mostrar la vista de recarga de la página para empleados
+Route::get('/empleados/recarga_Empleados', function () {
+    return view('admin.recargaTarjetaE');
+})->name('recarga.empleados');
+
+//Ruta para mostrar la página de consultar saldo (empleados)
+Route::get('/empleados/consultar_saldo', function () {
+    return view('admin.cardE');
+})->name('tarjeta.empleados');
+
+//Ruta para mostrar la página de cierre de caja para empleados
+Route::get('/empleados/cierre_caja', function () {
+    return view('Cierre_Caja.CierreCajaE');
+})->name('CierreCaja.empleados');

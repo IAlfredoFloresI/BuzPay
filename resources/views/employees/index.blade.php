@@ -18,8 +18,7 @@
                             <h1 class="mt-4">Administración de Usuarios</h1>
                         </div>
                         <div class="col d-flex justify-content-end">
-                            <img src="assets/img/Logo_Proyecto_Final_Proyector.png" alt="PAYBUS" with=80 height=80>
-                        </div>
+                        <img src="{{ asset('assets/img/Logo_Proyecto_Final_Proyector.png') }}" alt="PAYBUS" width="80" height="80">                        </div>
                     </div>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="admin.php">Inicio</a></li>
@@ -199,8 +198,8 @@ $(document).ready(function () {
 
     function loadEmployees() {
         $.ajax({
-            url: '{{ url("employees/list") }}',
-            type: 'get',
+            url: '{{ route("employees.list") }}', // Cambiado a ruta de Laravel
+            type: 'GET',
             success: function (data) {
                 var employeeCatalog = $('#employeeCatalog');
                 employeeCatalog.empty();
@@ -223,21 +222,20 @@ $(document).ready(function () {
                 $('.edit-btn').click(function () {
                     var id = $(this).data('id');
                     $.ajax({
-                        url: 'controller/register_controller.php?action=get_employee&id=' + id,
-                        type: 'get',
-                        success: function (data) {
-                            var employee = JSON.parse(data);
-                            $('#editEmployeeModal #idUsuario').val(employee.idUsuario);
+                        url: '{{ url("employees") }}/' + id, // Usa la ruta RESTful
+                        type: 'GET',
+                        success: function (employee) {
+                            $('#editEmployeeModal #idUsuario').val(employee.idusuario);
                             $('#editEmployeeModal #edit_nombre').val(employee.nombre);
                             $('#editEmployeeModal #edit_curp').val(employee.curp);
-                            $('#editEmployeeModal #edit_apellidoPaterno').val(employee.apellidoP);
-                            $('#editEmployeeModal #edit_apellidoMaterno').val(employee.apellidoM);
+                            $('#editEmployeeModal #edit_apellidoPaterno').val(employee.apellidop);
+                            $('#editEmployeeModal #edit_apellidoMaterno').val(employee.apellidom);
                             $('#editEmployeeModal #edit_correo_electronico').val(employee.correo_electronico);
                             $('#editEmployeeModal #edit_pass').val(employee.pass);
                             $('#editEmployeeModal #edit_clasificacion').val(employee.clasificacion);
                         },
-                        error: function (xhr, status, error) {
-                            $('#message').text('No se pudo cargar la información del empleado.');
+                        error: function () {
+                            alert('No se pudo cargar la información del empleado.');
                         }
                     });
                 });
@@ -247,90 +245,81 @@ $(document).ready(function () {
                     $('#confirmDeleteModal').modal('show');
                 });
             },
-            error: function (xhr, status, error) {
-                $('#message').text('No se pudo cargar la lista de empleados.');
+            error: function () {
+                alert('No se pudo cargar la lista de empleados.');
             }
         });
     }
 
-    // Cargar empleados al inicio
-    loadEmployees();
-
-    // Manejar el envío del formulario de registro
-    $('#registerForm').submit(function(event) {
+    $('#registerForm').submit(function (event) {
         event.preventDefault();
-
         $.ajax({
-            url: 'controller/register_controller.php?action=register',
-            type: 'post',
+            url: '{{ route("employees.register") }}',
+            type: 'POST',
             data: $('#registerForm').serialize(),
-            success: function(response) {
-                var result = JSON.parse(response);
-                if (result.status === 'success') {
-                    $('#successMessage').show().delay(3000).fadeOut();  // Mostrar el mensaje de éxito y ocultar después de 3 segundos
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            success: function (response) {
+                if (response.status === 'success') {
                     $('#registerEmployeeModal').modal('hide');
                     loadEmployees();
-                    $('#successModal').modal('show');  // Mostrar el modal de éxito
-                    $('#registerForm')[0].reset(); // Limpiar el formulario
+                    $('#registerForm')[0].reset();
                 } else {
-                    alert('No se pudo registrar el empleado: ' + result.message);
+                    alert('Error al registrar el empleado: ' + response.message);
                 }
             },
-            error: function(xhr, status, error) {
-                alert('No se pudo registrar el empleado: ' + xhr.responseText);
+            error: function () {
+                alert('No se pudo registrar el empleado.');
             }
         });
     });
 
-    // Manejar el envío del formulario de edición
-    $('#editForm').submit(function(event) {
+    $('#editForm').submit(function (event) {
         event.preventDefault();
-
+        var id = $('#editEmployeeModal #idUsuario').val();
         $.ajax({
-            url: 'controller/register_controller.php?action=update',
-            type: 'post',
+            url: '{{ url("employees/update") }}/' + id,
+            type: 'PUT',
             data: $('#editForm').serialize(),
-            success: function(response) {
-                var result = JSON.parse(response);
-                if (result.status === 'success') {
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            success: function (response) {
+                if (response.status === 'success') {
                     $('#editEmployeeModal').modal('hide');
                     loadEmployees();
-                    $('#successModal').modal('show');  // Mostrar el modal de éxito
                 } else {
-                    alert('No se pudo actualizar el empleado: ' + result.message);
+                    alert('Error al actualizar el empleado: ' + response.message);
                 }
             },
-            error: function(xhr, status, error) {
-                alert('No se pudo actualizar el empleado: ' + xhr.responseText);
+            error: function () {
+                alert('No se pudo actualizar el empleado.');
             }
         });
     });
 
-    // Manejar la confirmación de eliminación
     $('#confirmDeleteButton').click(function () {
         if (employeeIdToDelete) {
             $.ajax({
-                url: 'controller/register_controller.php?action=delete',
-                type: 'post',
-                data: { idUsuario: employeeIdToDelete },
+                url: '{{ url("employees/delete") }}/' + employeeIdToDelete,
+                type: 'DELETE',
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                 success: function (response) {
-                    var result = JSON.parse(response);
-                    if (result.status === 'success') {
+                    if (response.status === 'success') {
                         $('#confirmDeleteModal').modal('hide');
                         loadEmployees();
-                        alert('Usuario eliminado exitosamente');
                     } else {
-                        alert('No se pudo eliminar el empleado: ' + result.message);
+                        alert('No se pudo eliminar el empleado: ' + response.message);
                     }
                 },
-                error: function (xhr, status, error) {
-                    alert('No se pudo eliminar el empleado: ' + xhr.responseText);
+                error: function () {
+                    alert('No se pudo eliminar el empleado.');
                 }
             });
         }
     });
+
+    loadEmployees(); // Cargar empleados al iniciar
 });
 </script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="js/scripts_admin.js"></script>
