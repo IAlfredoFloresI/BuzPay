@@ -11,6 +11,7 @@ use App\Http\Controllers\CierreCajaController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\FaceAuthController;
+use App\Http\Middleware\UserTypeMiddleware;
 
 
 
@@ -29,15 +30,14 @@ Route::get('/admin', function () {
 })->name('admin.index');;
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/empleado', function () {
+    return view('empleados.index'); // Vista para empleados
+})->name('empleado.index');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+Route::get('/cliente', function () {
+    return view('clientes.index'); // Vista para clientes
+})->name('cliente.index');
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])
@@ -61,7 +61,7 @@ Route::post('face-authenticate', [FaceAuthController::class, 'authenticate']); /
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 
 
@@ -99,7 +99,6 @@ Route::prefix('cierre-caja')->group(function () {
     Route::get('get-total-recargas-dia', [CierreCajaController::class, 'getTotalRecargasDia'])->name('cierreCaja.getTotalRecargasDia');
     Route::get('get-fechas-recargas', [CierreCajaController::class, 'getFechasRecargas'])->name('cierreCaja.getFechasRecargas');
     Route::get('cierre-caja', [CierreCajaController::class, 'index'])->name('cierreCaja.index');
-
 });
 
 

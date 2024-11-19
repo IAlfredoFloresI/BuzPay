@@ -15,6 +15,6 @@ class Recarga extends Model {
     protected $fillable = ['monto', 'fecha', 'tarjeta', 'usuario'];
 
     public function usuario() {
-        return $this->belongsTo(Usuario::class, 'usuario', 'idusuario');
+        return $this->belongsTo(Usuario::class, 'usuars', 'id');
     }
 }
