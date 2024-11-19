@@ -103,14 +103,17 @@ Route::prefix('cierre-caja')->group(function () {
 
 
 //CRUD
-Route::prefix('employees')->group(function () {
-    Route::get('/list', [RegisterController::class, 'list_empleados'])->name('employees.list'); // Aquí agregué el nombre
-    Route::get('/get/{id}', [RegisterController::class, 'get_employee'])->name('employees.get'); // Opcional, agrega un nombre
-    Route::post('/register', [RegisterController::class, 'register'])->name('employees.register'); // Opcional, agrega un nombre
-    Route::post('/update/{id}', [RegisterController::class, 'update'])->name('employees.update'); // Opcional, agrega un nombre
-    Route::post('/delete/{id}', [RegisterController::class, 'delete'])->name('employees.delete'); // Opcional, agrega un nombre
-    Route::get('/employees', [RegisterController::class, 'index'])->name('employees.index');
-});
+// Ruta para mostrar la lista de empleados
+Route::get('/employees', [RegisterController::class, 'index'])->name('employees.index');
+
+// Ruta para la acción de obtener la lista de empleados (usada en el script)
+Route::get('/employees/list', [RegisterController::class, 'list'])->name('employees.list');
+
+// Otras rutas para crear, editar, eliminar empleados...
+Route::post('/employees/register', [RegisterController::class, 'store'])->name('employees.register');
+Route::get('/employees/{id}', [RegisterController::class, 'show'])->name('employees.show');
+Route::put('/employees/update/{id}', [RegisterController::class, 'update'])->name('employees.update');
+Route::delete('/employees/delete/{id}', [RegisterController::class, 'destroy'])->name('employees.delete');
 
 
 //AQUÍ COMINEZAN LAS PÁGINAS PARA EMPLEADOS
@@ -124,7 +127,7 @@ Route::get('/empleados', function () {
 // Ruta para mostrar la vista de recarga de la página para empleados
 Route::get('/empleados/recarga_Empleados', function () {
     return view('admin.recargaTarjetaE');
-})->name('recarga.empleados');
+})->name('recarga.empleados'); //Verificar posibles fallas en otra página
 
 //Ruta para mostrar la página de consultar saldo (empleados)
 Route::get('/empleados/consultar_saldo', function () {

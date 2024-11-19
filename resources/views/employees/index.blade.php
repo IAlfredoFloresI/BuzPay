@@ -9,6 +9,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles_admin.css" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     
         <div id="layoutSidenav_content">
             <main>
@@ -83,14 +85,6 @@
         <input type="text" id="curp" name="txt_curp" placeholder="CURP" class="form-control" required />
     </div>
     <div class="form-group">
-        <label for="apellidoPaterno">Apellido Paterno:</label>
-        <input type="text" id="apellidoPaterno" name="txt_apellidoP" placeholder="Apellido Paterno" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="apellidoMaterno">Apellido Materno:</label>
-        <input type="text" id="apellidoMaterno" name="txt_apellidoM" placeholder="Apellido Materno" class="form-control" required />
-    </div>
-    <div class="form-group">
         <label for="correo_electronico">Correo Electrónico:</label>
         <input type="email" id="correo_electronico" name="txt_correo_electronico" placeholder="Correo Electrónico" class="form-control" required />
     </div>
@@ -138,14 +132,7 @@
                             <label for="curp">CURP:</label>
                             <input type="text" id="edit_curp" name="txt_curp" placeholder="CURP" class="form-control" required />
                         </div>
-                        <div class="form-group">
-                            <label for="apellidoPaterno">Apellido Paterno:</label>
-                            <input type="text" id="edit_apellidoPaterno" name="txt_apellidoP" placeholder="Apellido Paterno" class="form-control" required />
-                        </div>
-                        <div class="form-group">
-                            <label for="apellidoMaterno">Apellido Materno:</label>
-                            <input type="text" id="edit_apellidoMaterno" name="txt_apellidoM" placeholder="Apellido Materno" class="form-control" required />
-                        </div>
+
                         <div class="form-group">
                             <label for="correo_electronico">Correo Electrónico:</label>
                             <input type="email" id="edit_correo_electronico" name="txt_correo_electronico" placeholder="Correo Electrónico" class="form-control" required />
@@ -198,7 +185,7 @@ $(document).ready(function () {
 
     function loadEmployees() {
         $.ajax({
-            url: '{{ route("employees.list") }}', // Cambiado a ruta de Laravel
+            url: '{{ route("employees.list") }}', // Ruta de Laravel
             type: 'GET',
             success: function (data) {
                 var employeeCatalog = $('#employeeCatalog');
@@ -206,13 +193,13 @@ $(document).ready(function () {
                 data.forEach(function (employee) {
                     var card = `<div class="card">
                                     <div class="card-body">
-                                        <h5 class="card-title">${employee.nombre} ${employee.apellidop} ${employee.apellidom}</h5>
+                                        <h5 class="card-title">${employee.name}</h5>
                                         <p class="card-text">CURP: ${employee.curp}</p>
-                                        <p class="card-text">Correo: ${employee.correo_electronico}</p>
-                                        <p class="card-text"><small class="text-muted">ID: ${employee.idusuario}</small></p>
+                                        <p class="card-text">Correo: ${employee.email}</p>
+                                        <p class="card-text"><small class="text-muted">ID: ${employee.id}</small></p>
                                         <div class="d-flex justify-content-start">
-                                            <button class="btn btn-warning edit-btn btn-space" data-id="${employee.idusuario}" data-toggle="modal" data-target="#editEmployeeModal">Editar</button>
-                                            <button class="btn btn-danger delete-btn btn-space" data-id="${employee.idusuario}">Eliminar</button>
+                                            <button class="btn btn-warning edit-btn btn-space" data-id="${employee.id}" data-toggle="modal" data-target="#editEmployeeModal">Editar</button>
+                                            <button class="btn btn-danger delete-btn btn-space" data-id="${employee.id}">Eliminar</button>
                                         </div>
                                     </div>
                                 </div>`;
@@ -222,16 +209,14 @@ $(document).ready(function () {
                 $('.edit-btn').click(function () {
                     var id = $(this).data('id');
                     $.ajax({
-                        url: '{{ url("employees") }}/' + id, // Usa la ruta RESTful
+                        url: '{{ url("employees") }}/' + id, // Usa la ruta RESTful de Laravel
                         type: 'GET',
                         success: function (employee) {
-                            $('#editEmployeeModal #idUsuario').val(employee.idusuario);
-                            $('#editEmployeeModal #edit_nombre').val(employee.nombre);
+                            $('#editEmployeeModal #id').val(employee.id);
+                            $('#editEmployeeModal #edit_nombre').val(employee.name);
                             $('#editEmployeeModal #edit_curp').val(employee.curp);
-                            $('#editEmployeeModal #edit_apellidoPaterno').val(employee.apellidop);
-                            $('#editEmployeeModal #edit_apellidoMaterno').val(employee.apellidom);
-                            $('#editEmployeeModal #edit_correo_electronico').val(employee.correo_electronico);
-                            $('#editEmployeeModal #edit_pass').val(employee.pass);
+                            $('#editEmployeeModal #edit_correo_electronico').val(employee.email);
+                            $('#editEmployeeModal #edit_pass').val(employee.password);
                             $('#editEmployeeModal #edit_clasificacion').val(employee.clasificacion);
                         },
                         error: function () {
@@ -251,33 +236,44 @@ $(document).ready(function () {
         });
     }
 
-    $('#registerForm').submit(function (event) {
-        event.preventDefault();
-        $.ajax({
-            url: '{{ route("employees.register") }}',
-            type: 'POST',
-            data: $('#registerForm').serialize(),
-            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-            success: function (response) {
-                if (response.status === 'success') {
-                    $('#registerEmployeeModal').modal('hide');
-                    loadEmployees();
-                    $('#registerForm')[0].reset();
-                } else {
-                    alert('Error al registrar el empleado: ' + response.message);
-                }
-            },
-            error: function () {
-                alert('No se pudo registrar el empleado.');
+    document.getElementById('registerForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch('{{ route("employees.register") }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         });
-    });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            alert('Empleado registrado correctamente.');
+            // Ocultar modal y recargar datos
+            $('#registerEmployeeModal').modal('hide');
+            form.reset();
+            loadEmployees();
+        } else {
+            alert('Error al registrar el empleado: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        alert('Ocurrió un error al registrar el empleado.');
+    }
+});
+
 
     $('#editForm').submit(function (event) {
         event.preventDefault();
-        var id = $('#editEmployeeModal #idUsuario').val();
+        var id = $('#editEmployeeModal #id').val();
         $.ajax({
-            url: '{{ url("employees/update") }}/' + id,
+            url: '{{ url("employees/update") }}/' + id, // Ruta de Laravel para actualizar
             type: 'PUT',
             data: $('#editForm').serialize(),
             headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
@@ -298,7 +294,7 @@ $(document).ready(function () {
     $('#confirmDeleteButton').click(function () {
         if (employeeIdToDelete) {
             $.ajax({
-                url: '{{ url("employees/delete") }}/' + employeeIdToDelete,
+                url: '{{ url("employees/delete") }}/' + employeeIdToDelete, // Ruta de Laravel para eliminar
                 type: 'DELETE',
                 headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                 success: function (response) {
@@ -319,6 +315,7 @@ $(document).ready(function () {
     loadEmployees(); // Cargar empleados al iniciar
 });
 </script>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
