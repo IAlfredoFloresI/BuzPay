@@ -24,7 +24,6 @@ public function obtenerDatosDelCliente($id)
 }
     public function realizarRecarga(Request $request)
     {
-        return response()->json(['message' => 'Recarga realizada correctamente'], 200); //CHAFA
 
         
         $request->validate([
