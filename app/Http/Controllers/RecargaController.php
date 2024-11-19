@@ -15,7 +15,7 @@ public function obtenerDatosDelCliente($id)
     if ($cliente) {
         return response()->json([
             'success' => true,
-            'idusuario' => $cliente->id, // Asegúrate de que 'idusuario' tiene el valor correcto
+            'id' => $cliente->id, // Asegúrate de que 'idusuario' tiene el valor correcto
             'nombre' => $cliente->nombre, // Agrega más campos si es necesario
         ]);
     } else {
@@ -24,6 +24,7 @@ public function obtenerDatosDelCliente($id)
 }
     public function realizarRecarga(Request $request)
     {
+        
 
         
         $request->validate([

@@ -27,6 +27,8 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
             'face_descriptor' => 'required|json',
+            'clasificacion' => 3, // Asignar como cliente por defecto
+
         ]);
     
         if ($validator->fails()) {

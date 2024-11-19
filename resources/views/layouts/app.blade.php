@@ -15,9 +15,8 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/Consultar_Saldo.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/css_cierrecaja.css') }}" rel="stylesheet" />
-    
-
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/scripts_admin.js  ')}}"></script>
     @stack('styles')
 
     <!-- Fonts -->

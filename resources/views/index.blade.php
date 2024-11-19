@@ -281,7 +281,7 @@
                                 <img src="assets/img/googleico.png" alt="Google Icon" /> Iniciar Sesión con Google
                             </a>
 
-                            <button type="button" class="btn btn-outline-success" id="openFaceIDModalLogin" data-action="login">Iniciar Sesión con FaceID</button>
+                            <button type="button" class="btn btn-outline-success" id="openFaceIDModalLogin" data-action="login">Iniciar Sesión FaceID</button>
 
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         </form>

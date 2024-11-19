@@ -25,10 +25,22 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
+    
         $request->session()->regenerate();
-
-        return redirect()->intended(route('admin.index', absolute: false));
+    
+        // Redirección basada en el tipo de usuario
+        $user = Auth::user();
+        switch ($user->clasificacion) {
+            case 1: // Dueño
+                return redirect()->intended('/admin');
+            case 2: // Empleado
+                return redirect()->intended('/empleado');
+            case 3: // Cliente
+                return redirect()->intended('/cliente');
+            default:
+                Auth::logout(); // Si no coincide con ningún tipo, cerrar sesión
+                return redirect('/login')->with('error', 'Acceso no autorizado.');
+        }
     }
 
     /**
