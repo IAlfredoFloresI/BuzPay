@@ -10,6 +10,8 @@ use App\Http\Controllers\EstadisticaController;
 use App\Http\Controllers\CierreCajaController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\FaceAuthController;
+
 
 
 
@@ -18,7 +20,7 @@ Route::get('/', function () {
 });
 
 
-
+Route::post('/face-login', [FaceAuthController::class, 'authenticate'])->name('face.authenticate');
 
 
 
@@ -49,6 +51,13 @@ Route::get('/register', [RegisteredUserController::class, 'create'])->name('regi
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+
+Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('register', [RegisteredUserController::class, 'store']); // Ruta para almacenar el usuario
+
+Route::post('face-authenticate', [FaceAuthController::class, 'authenticate']); // Ruta para la autenticación con FaceID
 
 
 
