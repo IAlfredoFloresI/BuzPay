@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Fruitcake\Cors\HandleCors;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -16,3 +17,5 @@ Route::get('/cliente/{id}', [RecargaController::class, 'getClienteData']);
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+

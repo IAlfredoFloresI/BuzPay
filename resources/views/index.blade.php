@@ -1,15 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
+
     <!-- Meta tags y configuración de la página -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>PAYBUS</title>
     <link rel="icon" type="image/x-icon" href="assets/img/Camión_Icono.png" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
     <link href="css/styles.css" rel="stylesheet" />
@@ -42,9 +49,19 @@
             /* Alinea verticalmente el enlace con el checkbox */
         }
     </style>
+    <style>
+        #faceid-video {
+            border: 2px solid #000;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body id="page-top">
+
+
+
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
@@ -222,6 +239,7 @@
         <!-- Sección de Modales para Login y Registro -->
 
         <!-- Modal de Login -->
+
         <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -248,21 +266,23 @@
                                 <input type="password" class="form-control" id="password" name="password" required>
                             </div>
                             <div class="block mt-4">
-                                <!-- Recordarme -->
                                 <div class="form-group form-check">
                                     <input type="checkbox" class="form-check-input" id="remember" name="remember">
                                     <label class="form-check-label" for="remember">Recordarme</label>
-
-                                    <!-- Olvidé mi contraseña -->
                                     <div class="form-group" id="olvidemipassword">
                                         <a href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
                                     </div>
                                 </div>
                             </div><br>
                             <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+
+                            <!-- Botón de Google -->
                             <a href="{{ route('auth.google') }}" class="btn btn-google">
-                                <img src="assets/img/googleico.png" alt="Google Icon" /> Iniciar sesión con Google
+                                <img src="assets/img/googleico.png" alt="Google Icon" /> Iniciar Sesión con Google
                             </a>
+
+                            <button type="button" class="btn btn-outline-success" id="openFaceIDModalLogin" data-action="login">Iniciar Sesión con FaceID</button>
+
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         </form>
                         <hr>
@@ -275,10 +295,8 @@
         </div>
 
 
-
         <!-- Modal de Registro -->
-        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -286,8 +304,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="registerForm" action="{{ route('register') }}" method="POST"
-                            onsubmit="return validateForm();">
+                        <form id="registerForm" action="{{ route('register') }}" method="POST" onsubmit="return validateForm();">
                             @csrf
                             <div class="mb-3">
                                 <label for="registerName" class="form-label">Nombre</label>
@@ -295,57 +312,46 @@
                             </div>
                             <div class="mb-3">
                                 <label for="registerCurp" class="form-label">CURP</label>
-                                <input type="text" class="form-control" id="registerCurp" name="curp" required
-                                    maxlength="18">
-                                <div id="curpError" class="text-danger" style="display: none;">CURP inválido. Debe
-                                    seguir el formato adecuado.</div>
+                                <input type="text" class="form-control" id="registerCurp" name="curp" required maxlength="18">
+                                <div id="curpError" class="text-danger" style="display: none;">CURP inválido. Debe seguir el formato adecuado.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="registerNacimiento" class="form-label">Fecha de Nacimiento</label>
-                                <input type="date" class="form-control" id="registerNacimiento" name="nacimiento"
-                                    required>
+                                <input type="date" class="form-control" id="registerNacimiento" name="nacimiento" required>
                             </div>
                             <div class="mb-3">
                                 <label for="registerEmail" class="form-label">Correo Electrónico</label>
                                 <div class="input-group">
-                                    <span class="input-group-text" id="registerEmail-addon"><i
-                                            class="bi bi-envelope-fill"></i></span>
-                                    <input type="email" class="form-control" id="registerEmail" name="email"
-                                        placeholder="nombre@ejemplo.com" aria-label="Correo Electrónico"
-                                        aria-describedby="registerEmail-addon" required>
+                                    <span class="input-group-text" id="registerEmail-addon"><i class="bi bi-envelope-fill"></i></span>
+                                    <input type="email" class="form-control" id="registerEmail" name="email" placeholder="nombre@ejemplo.com" aria-label="Correo Electrónico" aria-describedby="registerEmail-addon" required>
                                 </div>
-                                <div id="emailError" class="text-danger" style="display: none;">Correo electrónico
-                                    inválido.</div>
+                                <div id="emailError" class="text-danger" style="display: none;">Correo electrónico inválido.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="registerPassword" class="form-label">Contraseña</label>
                                 <div class="input-group">
-                                    <span class="input-group-text" id="registerPassword-addon"><i
-                                            class="bi bi-key-fill"></i></span>
-                                    <input type="password" class="form-control" id="registerPassword" name="password"
-                                        placeholder="Contraseña" aria-label="Contraseña"
-                                        aria-describedby="registerPassword-addon" required>
+                                    <span class="input-group-text" id="registerPassword-addon"><i class="bi bi-key-fill"></i></span>
+                                    <input type="password" class="form-control" id="registerPassword" name="password" placeholder="Contraseña" aria-label="Contraseña" aria-describedby="registerPassword-addon" required>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
                                 <div class="input-group">
-                                    <span class="input-group-text" id="confirmPassword-addon"><i
-                                            class="bi bi-key-fill"></i></span>
-                                    <input type="password" class="form-control" id="confirmPassword"
-                                        placeholder="Confirmar Contraseña" name="password_confirmation"
-                                        aria-label="Confirmar Contraseña" aria-describedby="confirmPassword-addon"
-                                        required>
+                                    <span class="input-group-text" id="confirmPassword-addon"><i class="bi bi-key-fill"></i></span>
+                                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar Contraseña" name="password_confirmation" aria-label="Confirmar Contraseña" aria-describedby="confirmPassword-addon" required>
                                 </div>
-                                <div id="passwordError" class="text-danger" style="display: none;">Las contraseñas no
-                                    coinciden.</div>
+                                <div id="passwordError" class="text-danger" style="display: none;">Las contraseñas no coinciden.</div>
                             </div>
-                            <div id="apellidoError" class="text-danger" style="display: none;">Debes ingresar al menos
-                                un apellido.</div>
+
+                            <button type="button" class="btn btn-outline-success" id="openFaceIDModalCapture" data-action="capture">Capturar FaceID</button>
+
+
                             <button type="submit" class="btn btn-primary">Registrarse</button>
+
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         </form>
                         <hr>
+                        <div id="facialMessage" class="text-center mt-3"></div>
                         <p class="text-center">
                             ¿Ya tienes cuenta? <a href="#" id="openLoginModal">¡Inicia Sesión aquí!</a>
                         </p>
@@ -353,6 +359,31 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal de FacialID -->
+        <div class="modal fade" id="faceIDModal" tabindex="-1" aria-labelledby="faceIDModalLabel" aria-hidden="true">
+
+
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="faceIDModalLabel">Captura tu FacialID</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="video-container">
+                            <canvas id="overlay" style="position: absolute; top: 0; left: 0;"></canvas>
+                            <video id="video" autoplay muted></video>
+                        </div>
+                        <p id="validationMessage" class="text-danger"></p>
+                        <button id="captureFace" class="btn btn-secondary" disabled>Guardar FacialID</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
 
         <script>
@@ -451,7 +482,10 @@
     <script src="js/scriptsP.js"></script>
     <script src="../js/bootstrap.min.js"></script>
 
-    <!-- Script para manejar el formulario de inicio de sesión -->
+    
+    <!-- Script de FaceID -->
+    <script src="{{ asset('js/faceid.js') }}"></script>
+
 
 </body>
 
