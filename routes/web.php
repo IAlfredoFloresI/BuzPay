@@ -83,8 +83,8 @@ Route::get('/admin/recarga', function () {
     return view('admin.recargarTarjeta');
 })->name('recarga.form');
 
-Route::post('/admin/recarga', [RecargaController::class, 'realizarRecarga'])->name('recarga.realizar');
-Route::get('/Controllers/RecargaController{id}', [RecargaController::class, 'obtenerDatosDelCliente']);
+Route::post('/admin/recarga', [RecargaController::class, 'realizarRecarga']);
+Route::get('/admin/cliente/{id}', [RecargaController::class, 'obtenerDatosDelCliente']);
 
 
 //Estadistica
