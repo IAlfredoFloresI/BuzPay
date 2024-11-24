@@ -12,6 +12,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\FaceAuthController;
 use App\Http\Middleware\UserTypeMiddleware;
+use App\Services\PayPalService;
+use Illuminate\Http\Request;
 
 
 
@@ -79,12 +81,18 @@ Route::get('/consultar-tarjeta', [CardController::class, 'getCardDetails']);
 
 //Recargar tarjeta
 // Ruta para mostrar la vista de recarga
+// Formulario de recarga
 Route::get('/admin/recarga', function () {
     return view('admin.recargarTarjeta');
 })->name('recarga.form');
 
-Route::post('/admin/recarga', [RecargaController::class, 'realizarRecarga']);
-Route::get('/admin/cliente/{id}', [RecargaController::class, 'obtenerDatosDelCliente']);
+// Procesar la recarga
+Route::post('/admin/recarga', [RecargaController::class, 'realizarRecarga'])->name('recarga.realizar');
+
+// Obtener datos de cliente basado en ID de tarjeta
+Route::get('/recarga/{id}', [RecargaController::class, 'obtenerDatosDelCliente'])->name('recarga.cliente');
+
+
 
 
 //Estadistica
@@ -138,3 +146,9 @@ Route::get('/empleados/consultar_saldo', function () {
 Route::get('/empleados/cierre_caja', function () {
     return view('Cierre_Caja.CierreCajaE');
 })->name('CierreCaja.empleados');
+
+
+//PAYPAL
+Route::post('/recargar/paypal', [RecargaController::class, 'iniciarRecargaPayPal'])->name('paypal.recargar');
+Route::get('/recarga/success', [RecargaController::class, 'success'])->name('paypal.success');
+Route::get('/recarga/cancel', [RecargaController::class, 'cancel'])->name('paypal.cancel');

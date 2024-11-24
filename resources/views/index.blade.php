@@ -156,7 +156,7 @@
                         </span>
                         <h4 class="my-3">Misión</h4>
                         <p class="text-muted">Ser un software que brinda la transformación del método de pago del
-                            transporte público, utilizando tarjetas recargables.</p>
+                            transporte público, utilizando tarjeta recargables.</p>
                     </div>
                     <div class="col-md-6">
                         <span class="fa-stack fa-4x">

@@ -39,7 +39,7 @@
                             <div class="row">
                                 <div class="col-md-6 centered-content">
                                     <br><br><br>
-                                    <img src="{{ asset('assets/img/vayven.jpg') }}" alt="Tarjetas" width="400" height="250">
+                                    <img src="{{ asset('assets/img/vayven.jpg') }}" alt="tarjeta" width="400" height="250">
                                 </div>
                                 <div class="col-md-6">
                                     <!-- Sección del lector de QR -->

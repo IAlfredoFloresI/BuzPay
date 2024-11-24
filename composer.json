@@ -13,14 +13,13 @@
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
         "livewire/livewire": "^3.0",
-        "fruitcake/laravel-cors": "^2.0"
+        "paypal/rest-api-sdk-php": "^1.6",
+        "srmklive/paypal": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
-        "laravel/breeze": "^2.2",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",
-        "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
         "pestphp/pest": "^3.4",
