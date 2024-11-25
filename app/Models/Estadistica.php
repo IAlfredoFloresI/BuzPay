@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
-class Estadistica extends Model
+class Estadistica
 {
     public static function getRecargasPorMes()
     {
+        Log::info('Ejecutando consulta: getRecargasPorMes');
         return DB::table('recarga')
-            ->select(DB::raw('DATE_FORMAT(fecha, "%Y-%m") as mes'), DB::raw('COUNT(*) as num_recargas'))
+            ->select(DB::raw('EXTRACT(MONTH FROM fecha) as mes, SUM(monto) as total'))
             ->groupBy('mes')
             ->orderBy('mes')
             ->get();
@@ -18,22 +19,22 @@ class Estadistica extends Model
 
     public static function getMesMaxRecargas()
     {
+        Log::info('Ejecutando consulta: getMesMaxRecargas');
         return DB::table('recarga')
-            ->select(DB::raw('DATE_FORMAT(fecha, "%Y-%m") as mes'), DB::raw('COUNT(*) as num_recargas'))
+            ->select(DB::raw('EXTRACT(MONTH FROM fecha) as mes, SUM(monto) as total'))
             ->groupBy('mes')
-            ->orderByDesc('num_recargas')
-            ->limit(1)
+            ->orderByDesc('total')
             ->first();
     }
 
     public static function getTotalRecargasPorTipo()
     {
-        return DB::table('tipotarjeta as tt')
-            ->leftJoin('tarjeta as t', 'tt.idtipo', '=', 't.tipo')
-            ->leftJoin('recarga as r', 't.id', '=', 'r.tarjeta')
-            ->select('tt.tipo as Tipo_de_Tarjeta', DB::raw('COALESCE(SUM(r.monto), 0) as Total_de_Recargas'))
-            ->where('tt.tipo', '!=', 'Discapacitado')
-            ->groupBy('tt.tipo')
+        Log::info('Ejecutando consulta: getTotalRecargasPorTipo');
+        return DB::table('recarga')
+            ->join('tarjeta', 'recarga.tarjeta_id', '=', 'tarjeta.id')
+            ->join('tipotarjeta', 'tarjeta.tipo', '=', 'tipotarjeta.idtipo')
+            ->select('tipotarjeta.tipo as Tipo_de_Tarjeta', DB::raw('COUNT(*) as total_de_Recargas'))
+            ->groupBy('tipotarjeta.tipo')
             ->get();
     }
 }

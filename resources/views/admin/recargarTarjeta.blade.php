@@ -30,13 +30,7 @@
 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-@push('styles')
-<link href="{{ asset('css/styles_admin.css') }}" rel="stylesheet" />
-@endpush
 
-<main>
-    <div id="layoutSidenav_content">
-        <main>
             <div class="container-fluid px-4">
                 <div class="row row-cols-1 row-cols-md-2">
                     <div class="col">
@@ -153,9 +147,7 @@
                 </div>
             </div>
 
-        </main>
-    </div>
-</main>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ asset('js/html5-qrcode.min.js') }}"></script>

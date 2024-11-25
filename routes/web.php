@@ -11,6 +11,7 @@ use App\Http\Controllers\CierreCajaController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\FaceAuthController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Middleware\UserTypeMiddleware;
 use App\Services\PayPalService;
 use Illuminate\Http\Request;
@@ -28,18 +29,29 @@ Route::post('/face-login', [FaceAuthController::class, 'authenticate'])->name('f
 
 
 Route::get('/admin', function () {
-    return view('admin.index');
+
+        // Retornar la vista con la variable
+        return view('admin.index');
 })->name('admin.index');;
 
 
 Route::get('/empleado', function () {
-    return view('empleados.index'); // Vista para empleados
+    // Retornar la vista con la variable
+    return view('empleados.index');
 })->name('empleado.index');
 
 Route::get('/cliente', function () {
-    return view('clientes.index'); // Vista para clientes
+    return view('clientes.index');
 })->name('cliente.index');
 
+
+Route::get('/cliente/recarga', function () {
+    return view('admin.RecargaTarjetaU'); // Vista para clientes
+})->name('recarga.usuario');
+
+Route::get('/cliente/saldo', function () {
+    return view('admin.cardU'); // Vista para clientes
+})->name('saldo.usuario');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])
@@ -103,25 +115,26 @@ Route::view('/estadisticas', 'Estadistica.index')->name('estadisticas');
 
 //Cierre de caja
 Route::prefix('cierre-caja')->group(function () {
-    Route::get('get-recargas-dia', [CierreCajaController::class, 'getRecargasDia'])->name('cierreCaja.getRecargasDia');
-    Route::get('get-total-recargas-dia', [CierreCajaController::class, 'getTotalRecargasDia'])->name('cierreCaja.getTotalRecargasDia');
-    Route::get('get-fechas-recargas', [CierreCajaController::class, 'getFechasRecargas'])->name('cierreCaja.getFechasRecargas');
-    Route::get('cierre-caja', [CierreCajaController::class, 'index'])->name('cierreCaja.index');
+    Route::get('/cierre-caja/recargas-dia', [CierreCajaController::class, 'getRecargasDia'])->name('cierreCaja.getRecargasDia');
+    Route::get('/cierre-caja/fechas-recargas', [CierreCajaController::class, 'getFechasRecargas'])->name('cierreCaja.getFechasRecargas');
+    Route::get('/cierre-caja/total-recargas-dia', [CierreCajaController::class, 'getTotalRecargasDia'])->name('cierreCaja.getTotalRecargasDia');
+     Route::get('cierre-caja', [CierreCajaController::class, 'index'])->name('cierreCaja.index');
 });
 
 
 //CRUD
-// Ruta para mostrar la lista de empleados
+
+// Rutas para la gestión de empleados
 Route::get('/employees', [RegisterController::class, 'index'])->name('employees.index');
+Route::get('employees/list', [EmployeeController::class, 'list'])->name('employees.list');
 
-// Ruta para la acción de obtener la lista de empleados (usada en el script)
-Route::get('/employees/list', [RegisterController::class, 'list'])->name('employees.list');
+Route::post('/employees/contract/{id}', [EmployeeController::class, 'hireClient'])->name('employees.contract'); // Contratar empleado
+Route::post('/employees/promote/{id}', [EmployeeController::class, 'promoteEmployee'])->name('employees.promote'); // Promover empleado
+Route::post('/employees/fire/{id}', [EmployeeController::class, 'fireEmployee'])->name('employees.fire'); // Despedir empleado
 
-// Otras rutas para crear, editar, eliminar empleados...
-Route::post('/employees/register', [RegisterController::class, 'store'])->name('employees.register');
-Route::get('/employees/{id}', [RegisterController::class, 'show'])->name('employees.show');
-Route::put('/employees/update/{id}', [RegisterController::class, 'update'])->name('employees.update');
-Route::delete('/employees/delete/{id}', [RegisterController::class, 'destroy'])->name('employees.delete');
+
+
+
 
 
 //AQUÍ COMINEZAN LAS PÁGINAS PARA EMPLEADOS
@@ -134,6 +147,7 @@ Route::get('/empleados', function () {
 
 // Ruta para mostrar la vista de recarga de la página para empleados
 Route::get('/empleados/recarga_Empleados', function () {
+    // Retornar la vista con la variable
     return view('admin.recargaTarjetaE');
 })->name('recarga.empleados'); //Verificar posibles fallas en otra página
 
@@ -146,6 +160,19 @@ Route::get('/empleados/consultar_saldo', function () {
 Route::get('/empleados/cierre_caja', function () {
     return view('Cierre_Caja.CierreCajaE');
 })->name('CierreCaja.empleados');
+
+Route::get('/employees', [RegisterController::class, 'index'])->name('employees.index');
+Route::get('/employees/list', [EmployeeController::class, 'list'])->name('employees.list');
+Route::post('/employees/contratar', [EmployeeController::class, 'contratar'])->name('employees.contratar');
+Route::post('/employees/promover', [EmployeeController::class, 'promover'])->name('employees.promover');
+Route::post('/employees/despedir', [EmployeeController::class, 'despedir'])->name('employees.despedir');
+
+
+
+
+// Ruta para cargar los empleados filtrados por clasificación 2 (solo EMPLEADOS)
+Route::get('/employees/filtro', [EmployeeController::class, 'getEmployees'])->name('employees.getClients');
+
 
 
 //PAYPAL

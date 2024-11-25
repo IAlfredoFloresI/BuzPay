@@ -2,329 +2,198 @@
 
 @section('content')
 
-<link rel="icon" type="image/x-icon" href="assets/img/Camión_Icono.png" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    <link href="css/styles_admin.css" rel="stylesheet" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    
-        <div id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid px-4">
-                    <div class="row row-cols-1 row-cols-md-2">
-                        <div class="col">
-                            <h1 class="mt-4">Administración de Usuarios</h1>
-                        </div>
-                        <div class="col d-flex justify-content-end">
-                        <img src="{{ asset('assets/img/Logo_Proyecto_Final_Proyector.png') }}" alt="PAYBUS" width="80" height="80">                        </div>
-                    </div>
-                    <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="admin.php">Inicio</a></li>
-                        <li class="breadcrumb-item active">Administración de Usuarios</li>
-                    </ol>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="container">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#registerEmployeeModal">
-                                        Registrar Nuevo Usuario +
-                                    </button>
-                                </div>
-                                <div id="employeeCatalog">
-                                    <!-- Aquí se llenarán los usuarios desde el servidor -->
-                                </div>
-                                <div id="message"></div> <!-- Mensajes de error y éxito -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal de Cerrar Sesión -->
-                <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content" style="background-color: #4A4A4A;">
-                            <div class="modal-header" style="background-color: #FFD700;">
-                                <h5 class="modal-title" id="logoutModalLabel">PAYBUS</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body text-center">
-                                <p style="color: white;">¿Seguro que quiere cerrar sesión?</p>
-                                <a class="btn btn-warning text-white" href="session/logout.php">Cerrar Sesión</a>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS (y Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<div class="container">
+    <h1>Lista de Empleados</h1>
+
+    <!-- Lista de Empleados fuera del Modal -->
+    <div id="employee-list">
+        <!-- Aquí se cargará la lista de empleados -->
+        <p>Cargando empleados...</p>
     </div>
 
-    <!-- Modal para Registrar Empleado -->
-    <div class="modal fade" id="registerEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="registerEmployeeModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <!-- Botón para abrir el modal de clientes -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#employeeModal">
+        Ver Clientes
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="registerEmployeeModalLabel">Registrar Usuario</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title" id="employeeModalLabel">Clientes Disponibles</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-<!-- Formulario de registro de empleado -->
-<form id="registerForm">
-    <div class="form-group">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="txt_nombre" placeholder="Nombre" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="curp">CURP:</label>
-        <input type="text" id="curp" name="txt_curp" placeholder="CURP" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="correo_electronico">Correo Electrónico:</label>
-        <input type="email" id="correo_electronico" name="txt_correo_electronico" placeholder="Correo Electrónico" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="clasificacion">Clasificación:</label>
-        <select id="clasificacion" name="txt_clasificacion" class="form-control" required>
-            <option value="1">EMPLEADO</option>
-            <option value="2">DUEÑO</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="txt_pass" placeholder="Contraseña" class="form-control" required />
-    </div>
-    <div id="successMessage" class="alert alert-success" style="display: none;">Empleado dado de alta con éxito</div>
-    <div class="button-group">
-        <button type="submit" class="btn btn-warning">Dar de Alta</button>
-    </div>
-</form>
-
-                </div>
-                <div id="message"></div> <!-- Mensajes de error y éxito -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Editar Empleado -->
-    <div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editEmployeeModalLabel">Editar Empleado</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="editForm">
-                        <input type="hidden" id="idUsuario" name="idUsuario" value="" />
-                        <div class="form-group">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" id="edit_nombre" name="txt_nombre" placeholder="Nombre" class="form-control" required />
-                        </div>
-                        <div class="form-group">
-                            <label for="curp">CURP:</label>
-                            <input type="text" id="edit_curp" name="txt_curp" placeholder="CURP" class="form-control" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="correo_electronico">Correo Electrónico:</label>
-                            <input type="email" id="edit_correo_electronico" name="txt_correo_electronico" placeholder="Correo Electrónico" class="form-control" required />
-                        </div>
-                        <div class="form-group">
-                            <label for="pass">Contraseña:</label>
-                            <input type="text" id="edit_pass" name="txt_pass" placeholder="Contraseña" class="form-control" required />
-                        </div>
-                        <div class="form-group">
-                            <label for="clasificacion">Clasificación:</label>
-                            <select id="edit_clasificacion" name="txt_clasificacion" class="form-control" required>
-                                <option value="1">EMPLEADO</option>
-                                <option value="2">DUEÑO</option>
-                            </select>
-                        </div>
-                        <div class="button-group">
-                            <button type="submit" class="btn btn-warning">Actualizar</button>
-                        </div>
-                    </form>
-                </div>
-                <div id="message"></div> <!-- Mensajes de error y éxito -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de confirmación de eliminación -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ¿Seguro que quiere eliminar este usuario?
+                    <div id="client-list">
+                        <!-- Aquí se cargará la lista de clientes -->
+                        <p>Cargando clientes...</p>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-$(document).ready(function () {
-    let employeeIdToDelete;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const employeeList = document.getElementById('employee-list');
+        const clientList = document.getElementById('client-list');
+        const employeeModal = document.getElementById('employeeModal');
 
-    function loadEmployees() {
-        $.ajax({
-            url: '{{ route("employees.list") }}', // Ruta de Laravel
-            type: 'GET',
-            success: function (data) {
-                var employeeCatalog = $('#employeeCatalog');
-                employeeCatalog.empty();
-                data.forEach(function (employee) {
-                    var card = `<div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${employee.name}</h5>
-                                        <p class="card-text">CURP: ${employee.curp}</p>
-                                        <p class="card-text">Correo: ${employee.email}</p>
-                                        <p class="card-text"><small class="text-muted">ID: ${employee.id}</small></p>
-                                        <div class="d-flex justify-content-start">
-                                            <button class="btn btn-warning edit-btn btn-space" data-id="${employee.id}" data-toggle="modal" data-target="#editEmployeeModal">Editar</button>
-                                            <button class="btn btn-danger delete-btn btn-space" data-id="${employee.id}">Eliminar</button>
-                                        </div>
-                                    </div>
-                                </div>`;
-                    employeeCatalog.append(card);
-                });
+        // Cargar los empleados fuera del modal
+        fetch('http://127.0.0.1:8000/employees/list?store=all')
+            .then(response => response.json())
+            .then(data => {
+                const employees = data.employees;
+                employeeList.innerHTML = ''; // Limpiar contenido previo
 
-                $('.edit-btn').click(function () {
-                    var id = $(this).data('id');
-                    $.ajax({
-                        url: '{{ url("employees") }}/' + id, // Usa la ruta RESTful de Laravel
-                        type: 'GET',
-                        success: function (employee) {
-                            $('#editEmployeeModal #id').val(employee.id);
-                            $('#editEmployeeModal #edit_nombre').val(employee.name);
-                            $('#editEmployeeModal #edit_curp').val(employee.curp);
-                            $('#editEmployeeModal #edit_correo_electronico').val(employee.email);
-                            $('#editEmployeeModal #edit_pass').val(employee.password);
-                            $('#editEmployeeModal #edit_clasificacion').val(employee.clasificacion);
-                        },
-                        error: function () {
-                            alert('No se pudo cargar la información del empleado.');
-                        }
-                    });
-                });
-
-                $('.delete-btn').click(function () {
-                    employeeIdToDelete = $(this).data('id');
-                    $('#confirmDeleteModal').modal('show');
-                });
-            },
-            error: function () {
-                alert('No se pudo cargar la lista de empleados.');
-            }
-        });
-    }
-
-    document.getElementById('registerForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-
-    const form = event.target;
-    const formData = new FormData(form);
-
-    try {
-        const response = await fetch('{{ route("employees.register") }}', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        });
-
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            alert('Empleado registrado correctamente.');
-            // Ocultar modal y recargar datos
-            $('#registerEmployeeModal').modal('hide');
-            form.reset();
-            loadEmployees();
-        } else {
-            alert('Error al registrar el empleado: ' + result.message);
-        }
-    } catch (error) {
-        console.error('Error en la solicitud:', error);
-        alert('Ocurrió un error al registrar el empleado.');
-    }
-});
-
-
-    $('#editForm').submit(function (event) {
-        event.preventDefault();
-        var id = $('#editEmployeeModal #id').val();
-        $.ajax({
-            url: '{{ url("employees/update") }}/' + id, // Ruta de Laravel para actualizar
-            type: 'PUT',
-            data: $('#editForm').serialize(),
-            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-            success: function (response) {
-                if (response.status === 'success') {
-                    $('#editEmployeeModal').modal('hide');
-                    loadEmployees();
+                if (employees.length === 0) {
+                    employeeList.innerHTML = '<p>No hay empleados disponibles.</p>';
                 } else {
-                    alert('Error al actualizar el empleado: ' + response.message);
+                    const table = document.createElement('table');
+                    table.classList.add('table', 'table-striped', 'table-hover');
+                    table.innerHTML = `
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    `;
+                    const tbody = table.querySelector('tbody');
+
+                    employees.forEach(employee => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${employee.name}</td>
+                            <td>${employee.email}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" onclick="fireEmployee(${employee.id})">Despedir</button>
+                                <button class="btn btn-warning btn-sm" onclick="promoteEmployee(${employee.id})">Ascender</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+
+                    employeeList.appendChild(table);
                 }
-            },
-            error: function () {
-                alert('No se pudo actualizar el empleado.');
-            }
+            })
+            .catch(error => {
+                console.error('Error al cargar los empleados:', error);
+                employeeList.innerHTML = '<p>Error al cargar los empleados. Intenta de nuevo más tarde.</p>';
+            });
+
+        // Cargar los clientes dentro del modal
+        employeeModal.addEventListener('show.bs.modal', function() {
+            fetch('http://127.0.0.1:8000/employees/list?store=all')
+                .then(response => response.json())
+                .then(data => {
+                    const clients = data.clients;
+                    clientList.innerHTML = ''; // Limpiar contenido previo
+
+                    if (clients.length === 0) {
+                        clientList.innerHTML = '<p>No hay clientes disponibles.</p>';
+                    } else {
+                        const table = document.createElement('table');
+                        table.classList.add('table', 'table-striped', 'table-hover');
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        `;
+                        const tbody = table.querySelector('tbody');
+
+                        clients.forEach(client => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${client.name}</td>
+                                <td>${client.email}</td>
+                                <td>
+                                    <button class="btn btn-success btn-sm" onclick="hireClient(${client.id})">Contratar</button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+
+                        clientList.appendChild(table);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar los clientes:', error);
+                    clientList.innerHTML = '<p>Error al cargar los clientes. Intenta de nuevo más tarde.</p>';
+                });
         });
     });
 
-    $('#confirmDeleteButton').click(function () {
-        if (employeeIdToDelete) {
-            $.ajax({
-                url: '{{ url("employees/delete") }}/' + employeeIdToDelete, // Ruta de Laravel para eliminar
-                type: 'DELETE',
-                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                success: function (response) {
-                    if (response.status === 'success') {
-                        $('#confirmDeleteModal').modal('hide');
-                        loadEmployees();
-                    } else {
-                        alert('No se pudo eliminar el empleado: ' + response.message);
-                    }
+    // Función para ascender a un empleado
+    function promoteEmployee(id) {
+        fetch(`/employees/promote/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                error: function () {
-                    alert('No se pudo eliminar el empleado.');
-                }
-            });
-        }
-    });
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Mensaje de éxito
+                location.reload(); // Recargar la página
+            })
+            .catch(error => console.error('Error al ascender el empleado:', error));
+    }
 
-    loadEmployees(); // Cargar empleados al iniciar
-});
+    // Función para despedir a un empleado
+    function fireEmployee(id) {
+        fetch(`/employees/fire/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Mensaje de éxito
+                location.reload(); // Recargar la página
+            })
+            .catch(error => console.error('Error al despedir el empleado:', error));
+    }
+
+    // Función para contratar un cliente
+    function hireClient(id) {
+        fetch(`/employees/contract/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Mensaje de éxito
+                location.reload(); // Recargar la página
+            })
+            .catch(error => console.error('Error al contratar el cliente:', error));
+    }
 </script>
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
-    <audio id="audioScaner" src="assets/sonido.mp3"></audio>
-    <script src="js/QRcamara.js"></script>
 @endsection

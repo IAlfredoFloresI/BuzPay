@@ -27,6 +27,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'face_descriptor',
+        'clasificacion',
+        'tienda',
     ];
 
     /**
@@ -58,4 +60,20 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    // Relación: Un usuario pertenece a una tienda
+    public function tienda()
+    {
+        return $this->belongsTo(Tienda::class, 'tienda', 'idtienda');
+    }
+
+    public function clasificacion()
+    {
+        return $this->belongsTo(Clasificacion::class);
+    }
+
+    // Relación: Un usuario pertenece a una clasificación
+    public function clasificacion1()
+    {
+        return $this->belongsTo(Clasificacion::class, 'clasificacion', 'idclasif'); // Relaciona con la tabla `clasificacion` y la columna `clasificacion`
+    }
 }
