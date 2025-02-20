@@ -26,8 +26,7 @@ class RegisteredUserController extends Controller
             'nacimiento' => 'required|date',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
-            'face_descriptor' => 'required|json',
-            'clasificacion' => 3, // Asignar como cliente por defecto
+            'face_descriptor' => 'json',
 
         ]);
     
@@ -47,13 +46,14 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'face_descriptor' => $request->face_descriptor,
+            'clasificacion' => 3, // Asignar como cliente por defecto
         ]);
     
         event(new Registered($user));
         Auth::login($user); 
     
         // Redirigir o devolver respuesta después del registro exitoso
-        return redirect()->route('admin.index')->with('success', '¡Registro exitoso y sesión iniciada!');
+        return redirect()->route('cliente.index')->with('success', '¡Registro exitoso y sesión iniciada!');
 
     }
     

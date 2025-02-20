@@ -61,15 +61,14 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-
+Route::post('register', [RegisteredUserController::class, 'store']); // Ruta para almacenar el usuario
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 
 
-Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('register', [RegisteredUserController::class, 'store']); // Ruta para almacenar el usuario
+
 
 Route::post('face-authenticate', [FaceAuthController::class, 'authenticate']); // Ruta para la autenticación con FaceID
 

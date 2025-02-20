@@ -98,12 +98,22 @@
                                     <br>
                                     <p>Para negocios registrados al servicio.</p>
                                     @if (Auth::check())
-                                    <a href="{{ url('/admin') }}" class="btn btn-primary">Administración</a>
+                                    @php
+                                    // Determinar la ruta según la clasificación del usuario
+                                    $route = match (Auth::user()->clasificacion) {
+                                    1 => '/admin', // Administrador
+                                    2 => '/empleado', // Empleado
+                                    3 => '/cliente', // Cliente
+                                    default => '/' // Redirección predeterminada si no tiene clasificación válida
+                                    };
+                                    @endphp
+
+                                    <a href="{{ url($route) }}" class="btn btn-primary btn-xl text-uppercase">Dashboard</a>
                                     @else
-                                    <a class="btn btn-primary btn-xl text-uppercase" href="#services"
-                                        data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar Sesión</a>
+                                    <a class="btn btn-primary btn-xl text-uppercase" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar Sesión</a>
                                     @endif
                                 </div>
+
                             </li>
                             <li class="CS">
                                 <div>
@@ -253,7 +263,7 @@
                             @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
-                                    <li>El email o la contraseña son incorrectos</li>
+                                    <li>$errors</li>
                                 </ul>
                             </div>
                             @endif
@@ -393,6 +403,7 @@
 
                 // Manejar clics en enlaces para abrir modales
                 document.getElementById('openRegisterModal').addEventListener('click', function() {
+                    // Si el modal de login está abierto, cerrarlo antes de abrir el de registro
                     if (loginModal._isShown) {
                         loginModal.hide();
                     }
@@ -400,27 +411,53 @@
                 });
 
                 document.getElementById('openLoginModal').addEventListener('click', function() {
+                    // Si el modal de registro está abierto, cerrarlo antes de abrir el de login
                     if (registerModal._isShown) {
                         registerModal.hide();
                     }
                     loginModal.show();
                 });
 
-                // Cerrar el modal de registro manualmente
+                // Cerrar todos los modales (login y registro) cuando se cierre el modal de registro
                 document.querySelectorAll('#registerModal .btn-close').forEach(button => {
                     button.addEventListener('click', function() {
+                        // Cerrar el modal de registro
                         registerModal.hide();
+
+                        // Asegurarse de eliminar el backdrop manualmente
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            backdrop.remove();
+                        }
+
+                        // Si el modal de login está abierto, cerrarlo también
+                        if (loginModal._isShown) {
+                            loginModal.hide();
+                        }
                     });
                 });
 
-                // Cerrar el modal de login manualmente
+                // Cerrar todos los modales (login y registro) cuando se cierre el modal de login
                 document.querySelectorAll('#loginModal .btn-close').forEach(button => {
                     button.addEventListener('click', function() {
+                        // Cerrar el modal de login
                         loginModal.hide();
+
+                        // Asegurarse de eliminar el backdrop manualmente
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            backdrop.remove();
+                        }
+
+                        // Si el modal de registro está abierto, cerrarlo también
+                        if (registerModal._isShown) {
+                            registerModal.hide();
+                        }
                     });
                 });
             });
         </script>
+
 
 
 
@@ -482,7 +519,7 @@
     <script src="js/scriptsP.js"></script>
     <script src="../js/bootstrap.min.js"></script>
 
-    
+
     <!-- Script de FaceID -->
     <script src="{{ asset('js/faceid.js') }}"></script>
 
